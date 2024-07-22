@@ -1,4 +1,5 @@
 import 'package:dependencies/dependencies.dart';
+import 'package:features/home/home_page.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {
@@ -16,22 +17,30 @@ class _SplashPageState extends State<SplashPage>
   void afterFirstLayout(BuildContext context) {}
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    // TODO: implement initState
+    super.initState();
 
+    Future.delayed(const Duration(milliseconds: 500), () async {
+      Navigator.pushNamedAndRemoveUntil(
+          context, HomePage.routeName, (route) => false);
+    });
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.white,
         body: Center(
-            child: Column(
-              children: [
-                Container(
-                      width: size.width * 0.7,
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.asset(
-                        "assets/images/logo.png",
-                        height: 100.h,
-                      ),
-                    ),
-              ],
-            )));
+            child: Container(
+      width: size.width * 0.7,
+      padding: const EdgeInsets.all(8.0),
+      child: Image.asset(
+        "assets/images/logo.png",
+        height: 100.h,
+      ),
+    )));
   }
 }

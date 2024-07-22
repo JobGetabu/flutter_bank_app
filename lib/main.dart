@@ -12,7 +12,7 @@ void _initFimber() {
 void _initBlocObserver() {
   BlocOverrides.runZoned(
     () async {
-
+      WidgetsFlutterBinding.ensureInitialized();
       runApp(const MyApp());
     },
     blocObserver: SimpleBlocObserver(),
@@ -20,7 +20,6 @@ void _initBlocObserver() {
 }
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
   await ScreenUtil.ensureScreenSize();
   _initFimber();
   _initBlocObserver();

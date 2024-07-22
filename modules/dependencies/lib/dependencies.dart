@@ -7,3 +7,4 @@ export 'package:fimber/fimber.dart';
 export 'package:flutter_screenutil/flutter_screenutil.dart';
 export 'package:after_layout/after_layout.dart';
 export 'package:google_fonts/google_fonts.dart';
+export 'package:flutter_form_builder/flutter_form_builder.dart';
