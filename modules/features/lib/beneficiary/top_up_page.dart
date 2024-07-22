@@ -1,4 +1,5 @@
 import 'package:dependencies/dependencies.dart';
+import 'package:features/data/models/beneficiary.dart';
 import 'package:features/widgets/colors.dart';
 import 'package:features/widgets/top_up_card.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,8 @@ class TopUpPage extends StatefulWidget {
 }
 
 class _TopUpPageState extends State<TopUpPage> {
+  int selectedAmount = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,15 +81,26 @@ class _TopUpPageState extends State<TopUpPage> {
                     fontWeight: FontWeight.w500),
               ),
               Text(
-                '100 AED',
+                '$selectedAmount AED',
                 style: TextStyle(
                     color: Palette.accentColor,
                     fontSize: 26.sp,
                     fontWeight: FontWeight.w600),
               ),
               SizedBox(height: 24.h),
-
-              TopUpCard(amount: 20, onPressed: (){}),
+              Wrap(
+                spacing: 8.0, // Adjust spacing between items
+                runSpacing: 8.0, // Adjust spacing between rows
+                children: topUpOptions
+                    .map((topUpItem) => TopUpCard(
+                        amount: topUpItem,
+                        onPressed: (topUpItem) {
+                          setState(() {
+                            selectedAmount = topUpItem;
+                          });
+                        }))
+                    .toList(),
+              ),
             ],
           ),
         ),

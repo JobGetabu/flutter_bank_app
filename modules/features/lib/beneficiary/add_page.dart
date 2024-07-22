@@ -18,12 +18,6 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
   final _PhoneController = TextEditingController();
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,

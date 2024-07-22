@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class TopUpCard extends StatelessWidget {
   final int amount;
-  final VoidCallback onPressed;
+  final Function(int amount) onPressed;
 
   const TopUpCard({
     super.key,
@@ -15,7 +15,7 @@ class TopUpCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onPressed,
+      onTap: (){ onPressed(amount); },
       child: Card(
         color: Colors.white,
         elevation: 2.h,
@@ -27,7 +27,7 @@ class TopUpCard extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.symmetric(vertical: 16.r, horizontal: 32.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
