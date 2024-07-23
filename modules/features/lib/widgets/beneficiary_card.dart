@@ -35,6 +35,8 @@ class BeneficiaryCard extends StatelessWidget {
             children: [
               Text(
                 beneficiary.nickname,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                     color: Palette.accentColor,
                     fontSize: 14.sp,

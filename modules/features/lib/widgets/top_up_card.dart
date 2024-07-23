@@ -27,14 +27,14 @@ class TopUpCard extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 16.r, horizontal: 32.r),
+          padding: EdgeInsets.symmetric(vertical: 16.r, horizontal: 16.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
               SizedBox(height: 2.h),
               Text(
-                '$amount',
+                '${amount.toInt()}',
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 18.sp,

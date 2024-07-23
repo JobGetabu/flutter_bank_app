@@ -18,8 +18,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  //User? _user;
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -27,20 +25,21 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(),
       backgroundColor: Colors.white,
-      body: MultiBlocProvider(
-        providers: [
-          BlocProvider(create: (context) => inject<UserDetailCubit>()),
-          BlocProvider(
-              create: (context) =>
-                  inject<TopUpCubit>()..simulateInitilizingUser())
-        ],
-        child: BlocConsumer<TopUpCubit, TopUpState>(
-          listener: (context, state) {
-            //_user = state.user;
-          },
-          builder: (context, state) {
-            return SafeArea(
-                child: Column(
+      body: BlocConsumer<TopUpCubit, TopUpState>(
+        listener: (context, state) {
+          if (state.errorMessage != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('${state.errorMessage}'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+        builder: (context, state) {
+          return SafeArea(
+              child: SingleChildScrollView(
+            child: Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -102,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(height: 36.h),
                 ConstrainedBox(
                   constraints: BoxConstraints(
-                    maxHeight: size.height * 0.17,
+                    maxHeight: size.height * 0.2,
                   ),
                   child: ListView.builder(
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -111,15 +110,16 @@ class _HomePageState extends State<HomePage> {
                     itemCount: state.beneficiaries.length,
                     itemBuilder: (context, index) {
                       return BeneficiaryCard(
-                          size: size, beneficiary: state.beneficiaries[index]);
+                          size: size,
+                          beneficiary: state.beneficiaries[index]);
                     },
                   ),
                 ),
                 SizedBox(height: 58.h),
               ],
-            ));
-          },
-        ),
+            ),
+          ));
+        },
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {

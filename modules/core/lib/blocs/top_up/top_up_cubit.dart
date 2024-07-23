@@ -61,6 +61,9 @@ class TopUpCubit extends Cubit<TopUpState> {
         phoneNumber: phoneNumber,
         monthlyTopUp: 0);
 
+    //mock api call
+    userRepository.addBeneficiary(nickname, phoneNumber);
+
     emit(state.copyWith(
       beneficiaries: [...state.beneficiaries, newBeneficiary],
       status: TopUpStatus.success,
@@ -86,7 +89,7 @@ class TopUpCubit extends Cubit<TopUpState> {
     return true;
   }
 
-  void topUp(String beneficiaryId, double amount) {
+  void topUp(String beneficiaryId, double amount) async {
     if (!canTopUp(beneficiaryId, amount)) {
       emit(state.copyWith(
         status: TopUpStatus.failure,
@@ -114,6 +117,8 @@ class TopUpCubit extends Cubit<TopUpState> {
       timestamp: DateTime.now(),
     );
 
+    await userRepository.topUp(amount, beneficiaryId);
+
     emit(state.copyWith(
       user: updatedUser,
       beneficiaries: updatedBeneficiaries,
@@ -131,6 +136,18 @@ class TopUpCubit extends Cubit<TopUpState> {
     return (remainingMonthlyLimit < maxBasedOnBalance)
         ? remainingMonthlyLimit
         : maxBasedOnBalance;
+  }
+
+  double calculateMaxTopUpForBeneficiary(String beneficiaryId) {
+    if (state.user == null) return 0;
+
+    Beneficiary beneficiary = state.beneficiaries.firstWhere((b) => b.id == beneficiaryId);
+    double maxMonthlyPerBeneficiary = state.user!.isVerified ? verifiedMaxTopUp : nonVerifiedMaxTopUp;
+    double remainingBeneficiaryLimit = maxMonthlyPerBeneficiary - beneficiary.monthlyTopUp;
+
+    double maxOverall = calculateMaxTopUp();
+
+    return [remainingBeneficiaryLimit, maxOverall].reduce((a, b) => a < b ? a : b);
   }
 
 }
