@@ -1,5 +1,5 @@
-name: features
-description: "bank app features package."
+name: core
+description: "A new Flutter project."
 version: 0.0.1
 homepage:
 
@@ -13,12 +13,10 @@ dependencies:
   dependencies:
     path: ../dependencies
 
-  core:
-    path: ../core
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
 
 flutter:
+

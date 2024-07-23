@@ -30,6 +30,9 @@ dependencies:
   features:
     path: modules/features
 
+  core:
+    path: modules/core
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -39,7 +42,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^3.0.0
+  flutter_lints: 4.0.0
 
   google_fonts: ^4.0.1
 
