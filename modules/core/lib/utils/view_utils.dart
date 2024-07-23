@@ -1,6 +1,7 @@
 import 'package:dependencies/dependencies.dart';
-import 'package:features/utils/size_config.dart';
 import 'package:flutter/widgets.dart';
+
+import 'size_config.dart';
 
 void setUpScreenUtil(BuildContext context) {
   ScreenUtil.init(context);
