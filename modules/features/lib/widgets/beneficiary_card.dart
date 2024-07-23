@@ -1,3 +1,4 @@
+import 'package:core/data/models/beneficiary.dart';
 import 'package:dependencies/dependencies.dart';
 import 'package:features/beneficiary/top_up_page.dart';
 import 'package:features/widgets/colors.dart';
@@ -5,12 +6,14 @@ import 'package:features/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 
 class BeneficiaryCard extends StatelessWidget {
+  final Beneficiary beneficiary;
+  final Size size;
+
   const BeneficiaryCard({
     super.key,
     required this.size,
+    required this.beneficiary,
   });
-
-  final Size size;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,7 @@ class BeneficiaryCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Amit Pahandit',
+                beneficiary.nickname,
                 style: TextStyle(
                     color: Palette.accentColor,
                     fontSize: 14.sp,
@@ -39,7 +42,7 @@ class BeneficiaryCard extends StatelessWidget {
               ),
               SizedBox(height: 2.h),
               Text(
-                '+971526798238',
+                beneficiary.phoneNumber,
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 12.sp,
@@ -50,7 +53,11 @@ class BeneficiaryCard extends StatelessWidget {
                 text: 'Recharge now',
                 isLoading: false,
                 onPressed: () {
-                  Navigator.pushNamed(context, TopUpPage.routeName);
+                  Navigator.pushNamed(context, TopUpPage.routeName, arguments: {
+                    'id': beneficiary.id,
+                    'nickname': beneficiary.nickname,
+                    'phoneNumber': beneficiary.phoneNumber,
+                  });
                 },
               )
             ],

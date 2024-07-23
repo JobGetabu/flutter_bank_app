@@ -1,8 +1,10 @@
+import 'package:core/services/navigation_service.dart';
+import 'package:core/utils/bloc_observer.dart';
+import 'package:core/utils/view_utils.dart';
+import 'package:core/di/injector.dart';
 import 'package:dependencies/dependencies.dart';
-import 'package:features/services/navigation_service.dart';
+import 'package:features/features.dart';
 import 'package:features/splash/splash_page.dart';
-import 'package:features/utils/bloc_observer.dart';
-import 'package:features/utils/view_utils.dart';
 import 'package:flutter/material.dart';
 
 void _initFimber() {
@@ -12,7 +14,7 @@ void _initFimber() {
 void _initBlocObserver() {
   BlocOverrides.runZoned(
     () async {
-      WidgetsFlutterBinding.ensureInitialized();
+
       runApp(const MyApp());
     },
     blocObserver: SimpleBlocObserver(),
@@ -20,9 +22,14 @@ void _initBlocObserver() {
 }
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await ScreenUtil.ensureScreenSize();
+  await setUpLocator();
   _initFimber();
-  _initBlocObserver();
+  //_initBlocObserver();
+  Bloc.observer = SimpleBlocObserver();
+  runApp(const MyApp());
+
 }
 
 class MyApp extends StatelessWidget {
@@ -36,7 +43,7 @@ class MyApp extends StatelessWidget {
         setUpScreenUtil(context);
         return MediaQuery(
           data: MediaQuery.of(context)
-              .copyWith(textScaler: TextScaler.linear(1.0)),
+              .copyWith(textScaler: const TextScaler.linear(1.0)),
           child: widget!,
         );
       },

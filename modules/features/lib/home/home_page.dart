@@ -1,3 +1,7 @@
+import 'package:core/blocs/top_up/top_up_cubit.dart';
+import 'package:core/blocs/user_details/user_detail_cubit.dart';
+import 'package:core/data/models/user.dart';
+import 'package:core/di/injector.dart';
 import 'package:dependencies/dependencies.dart';
 import 'package:features/beneficiary/add_page.dart';
 import 'package:features/widgets/beneficiary_card.dart';
@@ -14,6 +18,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //User? _user;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -21,56 +27,100 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(),
       backgroundColor: Colors.white,
-      body: SafeArea(
-          child: Column(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Image.asset(
-            "assets/images/logo.png",
-            colorBlendMode: BlendMode.clear,
-            height: 100.h,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: Text(
-              'My Beneficiaries',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20.sp,
-                  letterSpacing: 1.3,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          SizedBox(height: 4.h),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: Text(
-              'Add and send money instantly up to AED 3000. \nRemaining this month: AED 2500',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w400),
-            ),
-          ),
-          SizedBox(height: 36.h),
-          ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: size.height * 0.17,
-            ),
-            child: ListView.builder(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: 5,
-              itemBuilder: (context, index) {
-                return BeneficiaryCard(size: size);
-              },
-            ),
-          ),
-          SizedBox(height: 58.h),
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => inject<UserDetailCubit>()),
+          BlocProvider(
+              create: (context) =>
+                  inject<TopUpCubit>()..simulateInitilizingUser())
         ],
-      )),
+        child: BlocConsumer<TopUpCubit, TopUpState>(
+          listener: (context, state) {
+            //_user = state.user;
+          },
+          builder: (context, state) {
+            return SafeArea(
+                child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Image.asset(
+                      "assets/images/logo.png",
+                      colorBlendMode: BlendMode.clear,
+                      height: 100.h,
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: Text(
+                    'Hi ${state.user?.name}',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20.sp,
+                        letterSpacing: 1.3,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: Text(
+                    'Status: ${state.user?.isVerified == true ? 'verified' : 'unverified'} \nAccount balance: AED ${state.user?.balance}',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w400),
+                  ),
+                ),
+                SizedBox(height: 24.h),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: Text(
+                    'My Beneficiaries',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20.sp,
+                        letterSpacing: 1.3,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: Text(
+                    'Add and send money instantly up to AED 3000. \nRemaining this month: AED ${context.read<TopUpCubit>().calculateMaxTopUp()}',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w400),
+                  ),
+                ),
+                SizedBox(height: 36.h),
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: size.height * 0.17,
+                  ),
+                  child: ListView.builder(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: state.beneficiaries.length,
+                    itemBuilder: (context, index) {
+                      return BeneficiaryCard(
+                          size: size, beneficiary: state.beneficiaries[index]);
+                    },
+                  ),
+                ),
+                SizedBox(height: 58.h),
+              ],
+            ));
+          },
+        ),
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.pushNamed(context, AddBeneficiary.routeName);

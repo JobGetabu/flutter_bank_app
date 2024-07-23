@@ -1,5 +1,5 @@
+import 'package:core/utils/validators.dart';
 import 'package:dependencies/dependencies.dart';
-import 'package:features/utils/validators.dart';
 import 'package:features/widgets/colors.dart';
 import 'package:flutter/material.dart';
 

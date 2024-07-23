@@ -21,6 +21,9 @@ class _SplashPageState extends State<SplashPage>
     // TODO: implement initState
     super.initState();
 
+    //simulate loading other required libraries like
+    //security check, verify app authenticity
+    //load 3rd-party resources
     Future.delayed(const Duration(milliseconds: 500), () async {
       Navigator.pushNamedAndRemoveUntil(
           context, HomePage.routeName, (route) => false);

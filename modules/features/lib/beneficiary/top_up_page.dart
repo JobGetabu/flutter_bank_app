@@ -1,5 +1,5 @@
+import 'package:core/data/models/top_up_option.dart';
 import 'package:dependencies/dependencies.dart';
-import 'package:features/data/models/beneficiary.dart';
 import 'package:features/widgets/colors.dart';
 import 'package:features/widgets/top_up_card.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class TopUpPage extends StatefulWidget {
 }
 
 class _TopUpPageState extends State<TopUpPage> {
-  int selectedAmount = 0;
+  double selectedAmount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -92,9 +92,9 @@ class _TopUpPageState extends State<TopUpPage> {
                 Wrap(
                   spacing: 8.0, // Adjust spacing between items
                   runSpacing: 8.0, // Adjust spacing between rows
-                  children: topUpOptions
+                  children: TOP_UP_OPTIONS
                       .map((topUpItem) => TopUpCard(
-                          amount: topUpItem,
+                          amount: topUpItem.amount,
                           onPressed: (topUpItem) {
                             setState(() {
                               selectedAmount = topUpItem;

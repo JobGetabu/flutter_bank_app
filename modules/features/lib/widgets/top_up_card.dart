@@ -3,8 +3,8 @@ import 'package:features/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
 class TopUpCard extends StatelessWidget {
-  final int amount;
-  final Function(int amount) onPressed;
+  final double amount;
+  final Function(double amount) onPressed;
 
   const TopUpCard({
     super.key,

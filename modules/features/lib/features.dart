@@ -1,7 +1,15 @@
 library features;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+import 'package:features/beneficiary/add_page.dart';
+import 'package:features/beneficiary/top_up_page.dart';
+import 'package:features/home/home_page.dart';
+import 'package:features/splash/splash_page.dart';
+import 'package:flutter/material.dart';
+
+
+final Map<String, WidgetBuilder> routes = {
+  SplashPage.routeName: (context) => SplashPage(),
+  HomePage.routeName: (context) => HomePage(),
+  AddBeneficiary.routeName: (context) => AddBeneficiary(),
+  TopUpPage.routeName: (context) => TopUpPage(),
+};
