@@ -22,22 +22,22 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      appBar: AppBar(),
-      backgroundColor: Colors.white,
-      body: BlocConsumer<TopUpCubit, TopUpState>(
-        listener: (context, state) {
-          if (state.errorMessage != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('${state.errorMessage}'),
-                backgroundColor: Colors.red,
-              ),
-            );
-          }
-        },
-        builder: (context, state) {
-          return SafeArea(
+    return BlocConsumer<TopUpCubit, TopUpState>(
+      listener: (context, state) {
+        if (state.status == TopUpStatus.failure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${state.errorMessage}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(),
+          backgroundColor: Colors.white,
+          body: SafeArea(
               child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -110,38 +110,47 @@ class _HomePageState extends State<HomePage> {
                     itemCount: state.beneficiaries.length,
                     itemBuilder: (context, index) {
                       return BeneficiaryCard(
-                          size: size,
-                          beneficiary: state.beneficiaries[index]);
+                          size: size, beneficiary: state.beneficiaries[index]);
                     },
                   ),
                 ),
                 SizedBox(height: 58.h),
               ],
             ),
-          ));
-        },
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.pushNamed(context, AddBeneficiary.routeName);
-        },
-        label: Text(
-          'Add Beneficiary',
-          style: TextStyle(
+          )),
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {
+              if (state.beneficiaries.length > 5) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.errorMessage!),
+                    duration: const Duration(milliseconds: 500),
+                  ),
+                );
+              } else {
+                Navigator.pushNamed(context, AddBeneficiary.routeName);
+              }
+            },
+            label: Text(
+              'Add Beneficiary',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w400),
+            ),
+            icon: const Icon(
+              Icons.add,
               color: Colors.white,
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w400),
-        ),
-        icon: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-        backgroundColor: Palette.fadeAccentColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+            ),
+            backgroundColor: Palette.fadeAccentColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
+        );
+      },
     );
   }
 }

@@ -59,6 +59,7 @@ class BeneficiaryCard extends StatelessWidget {
                     'id': beneficiary.id,
                     'nickname': beneficiary.nickname,
                     'phoneNumber': beneficiary.phoneNumber,
+                    'monthlyTopUp': beneficiary.monthlyTopUp,
                   });
                 },
               )

@@ -1,6 +1,6 @@
 part of 'top_up_cubit.dart';
 
-enum TopUpStatus { initial, loading, success, failure }
+enum TopUpStatus { initial, loading, success, failure, topUpFailure, formErrors }
 
 class TopUpState extends Equatable {
   final User? user;

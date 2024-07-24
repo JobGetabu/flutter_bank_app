@@ -43,7 +43,7 @@ class TopUpCubit extends Cubit<TopUpState> {
   void addBeneficiary(String nickname, String phoneNumber) {
     if (state.beneficiaries.length >= 5) {
       emit(state.copyWith(
-        status: TopUpStatus.failure,
+        status: TopUpStatus.formErrors,
         errorMessage: 'Maximum number of beneficiaries (5) reached.',
       ));
       return;
@@ -51,7 +51,7 @@ class TopUpCubit extends Cubit<TopUpState> {
 
     if (nickname.length > 20) {
       emit(state.copyWith(
-        status: TopUpStatus.failure,
+        status: TopUpStatus.formErrors,
         errorMessage: 'Nickname must be 20 characters or less.',
       ));
       return;
@@ -94,7 +94,7 @@ class TopUpCubit extends Cubit<TopUpState> {
   topUp(String beneficiaryId, double amount) async {
     if (!canTopUp(beneficiaryId, amount)) {
       emit(state.copyWith(
-        status: TopUpStatus.failure,
+        status: TopUpStatus.topUpFailure,
         errorMessage: 'Top-up not allowed. Check limits and balance.',
       ));
       return;

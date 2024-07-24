@@ -42,7 +42,7 @@ class _TopUpPageState extends State<TopUpPage> {
       ),
       body: BlocConsumer<TopUpCubit, TopUpState>(
         listener: (context, state) {
-          if (state.errorMessage != null) {
+          if (state.status == TopUpStatus.topUpFailure &&  state.errorMessage != null) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('${state.errorMessage}'),
@@ -78,6 +78,14 @@ class _TopUpPageState extends State<TopUpPage> {
                     SizedBox(height: 2.h),
                     Text(
                       'Phone: $phoneNumber',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w400),
+                    ),
+                    SizedBox(height: 2.h),
+                    Text(
+                      'Month TopUp: $monthlyTopUp',
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 12.sp,

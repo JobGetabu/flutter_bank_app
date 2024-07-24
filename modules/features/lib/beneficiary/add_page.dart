@@ -40,8 +40,30 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
             )),
       ),
       body: BlocConsumer<TopUpCubit, TopUpState>(
-        listener: (context, state) {
-          // TODO: implement listener
+        listener: (context, state) async {
+          if(state.status == TopUpStatus.success){
+            //show success message
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Beneficiary added successfully'),
+                duration: const Duration(milliseconds: 500),
+
+              ),
+            );
+
+            //delay & pop
+            await Future.delayed(const Duration(milliseconds: 500));
+            Navigator.pop(ctx);
+          }
+
+          if (state.status == TopUpStatus.formErrors) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('${state.errorMessage}'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
         },
         builder: (context, state) {
           ctx = context;
@@ -118,13 +140,13 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: ()  async{
+        onPressed: ()  async {
           if (_formKey.currentState!.validate()) {
             //loading
             //option to use better loaders
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Adding successfully'),
+                content: Text('Adding beneficiary...'),
                 duration: const Duration(milliseconds: 500),
               ),
             );
@@ -132,18 +154,10 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
             ctx.read<TopUpCubit>().addBeneficiary(
                 _nicknameController.text, _phoneController.text);
 
-            //show success message
+          } else {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Beneficiary added successfully'),
-                duration: const Duration(milliseconds: 500),
-
-              ),
+              const SnackBar(content: Text('Please correct the form errors')),
             );
-
-            //delay & pop
-            await Future.delayed(const Duration(milliseconds: 500));
-            Navigator.pop(ctx);
           }
         },
         label: Text(
