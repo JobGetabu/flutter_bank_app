@@ -1,3 +1,4 @@
+import 'package:core/data/models/top_up_option.dart';
 import 'package:dependencies/dependencies.dart';
 import 'package:core/data/models/beneficiary.dart';
 import 'package:core/data/models/transactions.dart';
@@ -19,6 +20,7 @@ class TopUpCubit extends Cubit<TopUpState> {
   final double totalMaximumTopUp = 3000.0;
 
   final double topUpFee = 1.0;
+  List<double> topUpOptions = [5, 10, 20, 30, 50, 75, 100];
 
   void simulateInitilizingUser() async {
     final user = await userRepository.getUserData();
@@ -89,7 +91,7 @@ class TopUpCubit extends Cubit<TopUpState> {
     return true;
   }
 
-  void topUp(String beneficiaryId, double amount) async {
+  topUp(String beneficiaryId, double amount) async {
     if (!canTopUp(beneficiaryId, amount)) {
       emit(state.copyWith(
         status: TopUpStatus.failure,
@@ -133,9 +135,8 @@ class TopUpCubit extends Cubit<TopUpState> {
     double remainingMonthlyLimit = totalMaximumTopUp - state.user!.monthlyTopUpTotal;
     double maxBasedOnBalance = state.user!.balance - topUpFee;
 
-    return (remainingMonthlyLimit < maxBasedOnBalance)
-        ? remainingMonthlyLimit
-        : maxBasedOnBalance;
+    return (remainingMonthlyLimit < maxBasedOnBalance) ? remainingMonthlyLimit : maxBasedOnBalance;
+
   }
 
   double calculateMaxTopUpForBeneficiary(String beneficiaryId) {
@@ -148,6 +149,23 @@ class TopUpCubit extends Cubit<TopUpState> {
     double maxOverall = calculateMaxTopUp();
 
     return [remainingBeneficiaryLimit, maxOverall].reduce((a, b) => a < b ? a : b);
+  }
+
+  List<double> getAvailableTopUpOptions(String beneficiaryId) {
+    double maxTopUp = calculateMaxTopUpForBeneficiary(beneficiaryId);
+    return topUpOptions.where((amount) => amount <= maxTopUp).toList();
+  }
+
+  List<Transaction> getTransactionsForBeneficiary(String beneficiaryId) {
+    return state.transactions.where((t) => t.beneficiaryId == beneficiaryId).toList();
+  }
+
+  double getBeneficiaryBalance(String beneficiaryId) {
+    return state.beneficiaries.firstWhere((b) => b.id == beneficiaryId).monthlyTopUp;
+  }
+
+  double getUserBalance() {
+    return state.user?.balance ?? 0;
   }
 
 }
