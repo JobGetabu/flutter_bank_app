@@ -1,4 +1,4 @@
-# bank_app
+# Edenred
 
 A new Flutter project.
 
