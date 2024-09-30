@@ -1,0 +1,77 @@
+name: Flutter Workflow
+
+on: [push, workflow_dispatch]
+jobs:
+  setup:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.0.5'
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+      
+      - name: Activate melos
+        run: dart pub global activate melos
+
+      - name: Clean with melos
+        run: melos clean
+
+      - name: Bootstrap with melos
+        run: melos bs
+
+      - name: Upgrade packages
+        run: flutter pub upgrade
+
+      - name: Get packages
+        run: flutter pub get
+
+      - name: Activate junitreport
+        run: flutter pub global activate junitreport
+
+  # test:
+  #   needs: setup
+  #   runs-on: macos-latest
+  #   steps:
+  #     - name: Test
+  #       run: melos run test
+
+  #     - name: Generate coverage
+  #       run: melos run test_results
+      
+  #     - name: Generate coverage Report
+  #       run: lcov -r coverage_report/lcov.info '*/__test*__/*' -o coverage_report/lcov_cleaned.info
+
+
+
+
+
+    #   stage: test
+    # script:
+    #   - melos run test
+    #   - melos run gen_coverage
+    #   # - melos run test_results
+    #   - lcov -r coverage_report/lcov.info '*/__test*__/*' -o coverage_report/lcov_cleaned.info
+    #   - cd modules/core && flutter test --coverage --machine | tojunit > report.xml
+    #   # - genhtml coverage_report/lcov_cleaned.info --output=coverage_report
+    # coverage: '/lines\.*: \d+\.\d+\%/'
+    # after_script:
+    #   - rm -f ~/assets/env/production/.env
+    #   - rm -f ~/assets/env/staging/.env
+    # tags:
+    #   - macos
+    # artifacts:
+    #   when: always
+    #   paths:
+    #     # - rspec.xml
+    #     - coverage_report
+    #     - modules/core/report.xml
+    #   reports:
+    #     junit:
+    #       - modules/core/report.xml
