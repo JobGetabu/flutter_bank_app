@@ -1,9 +1,9 @@
-# Flutter crossplatform Android - iOS - Web - Desktop(WIP)
-# Test cases and Automation
+# Flutter Android - iOS - Web - Desktop(WIP)
+## Test cases and Automation
 
 
 
-## Getting Started
+### Getting Started
 
 Clone this repo to your local machine
 
